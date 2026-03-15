@@ -1,14 +1,23 @@
 const BASE = "/api";
 
+async function parseResponse(res, fallbackMessage) {
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message || fallbackMessage);
+  }
+
+  return data;
+}
+
 export async function signup(name, email, password) {
   const res = await fetch(`${BASE}/auth/signup`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name, email, password }),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || "Signup failed");
-  return data;
+
+  return parseResponse(res, "Signup failed");
 }
 
 export async function login(email, password) {
@@ -17,27 +26,24 @@ export async function login(email, password) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || "Login failed");
-  return data;
+
+  return parseResponse(res, "Login failed");
 }
 
 export async function getBalance(token) {
   const res = await fetch(`${BASE}/account/balance`, {
     headers: { Authorization: `Bearer ${token}` },
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || "Failed to load balance");
-  return data;
+
+  return parseResponse(res, "Failed to load balance");
 }
 
 export async function getStatement(token) {
   const res = await fetch(`${BASE}/account/statement`, {
     headers: { Authorization: `Bearer ${token}` },
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || "Failed to load statement");
-  return data;
+
+  return parseResponse(res, "Failed to load statement");
 }
 
 export async function transfer(token, receiverId, amount) {
@@ -49,7 +55,6 @@ export async function transfer(token, receiverId, amount) {
     },
     body: JSON.stringify({ receiverId, amount: Number(amount) }),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || "Transfer failed");
-  return data;
+
+  return parseResponse(res, "Transfer failed");
 }

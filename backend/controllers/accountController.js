@@ -1,5 +1,47 @@
 const supabase = require("../config/supabaseClient");
 
+async function attachPartyNames(transactions) {
+  if (!Array.isArray(transactions) || transactions.length === 0) {
+    return transactions || [];
+  }
+
+  const ids = [
+    ...new Set(
+      transactions.flatMap((transaction) => [
+        transaction.sender_id,
+        transaction.receiver_id,
+      ]),
+    ),
+  ];
+
+  if (ids.length === 0) {
+    return transactions;
+  }
+
+  const { data: users, error } = await supabase
+    .from("users")
+    .select("id, name, email")
+    .in("id", ids);
+
+  if (error || !users) {
+    return transactions;
+  }
+
+  const userMap = new Map(users.map((user) => [user.id, user]));
+
+  return transactions.map((transaction) => ({
+    ...transaction,
+    receiver_name:
+      userMap.get(transaction.receiver_id)?.name ||
+      userMap.get(transaction.receiver_id)?.email ||
+      null,
+    sender_name:
+      userMap.get(transaction.sender_id)?.name ||
+      userMap.get(transaction.sender_id)?.email ||
+      null,
+  }));
+}
+
 exports.getBalance = async (req, res) => {
   const { data, error } = await supabase
     .from("users")
@@ -21,7 +63,7 @@ exports.getStatement = async (req, res) => {
 
   if (error) return res.status(400).json({ message: error.message });
 
-  res.json(data);
+  res.json(await attachPartyNames(data));
 };
 
 exports.transfer = async (req, res) => {

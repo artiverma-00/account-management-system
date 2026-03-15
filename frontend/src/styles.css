@@ -54,6 +54,11 @@ body::before {
   gap: 24px;
 }
 
+.page-shell--auth {
+  min-height: 100vh;
+  align-content: center;
+}
+
 .hero-panel,
 .detail-panel {
   position: relative;
@@ -85,6 +90,14 @@ body::before {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 20px;
   padding: 28px;
+}
+
+.detail-panel--single {
+  grid-template-columns: 1fr;
+}
+
+.detail-panel--dashboard {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .eyebrow {
@@ -153,6 +166,48 @@ h2 {
 
 .status-card__value {
   font-size: 1.15rem;
+}
+
+.nav-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.nav-link {
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(255, 252, 247, 0.75);
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.nav-link--active {
+  background: #231c18;
+  color: #fff4eb;
+}
+
+.app-shell__hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.app-shell__actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.user-chip {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(35, 28, 24, 0.08);
+  font-weight: 600;
 }
 
 .status-pill {
@@ -227,6 +282,10 @@ h2 {
   cursor: not-allowed;
 }
 
+.auth-btn--secondary {
+  background: #231c18;
+}
+
 .link-btn {
   background: none;
   border: none;
@@ -237,10 +296,66 @@ h2 {
   padding: 0;
 }
 
+.auth-switch {
+  margin: 0;
+  color: var(--muted);
+}
+
+.auth-switch a {
+  color: var(--accent);
+}
+
+.transfer-feedback {
+  margin-top: 16px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.statement-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255, 252, 247, 0.72);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.statement-table th,
+.statement-table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid rgba(64, 45, 35, 0.08);
+}
+
+.statement-table th {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.transaction-type {
+  font-weight: 700;
+}
+
+.transaction-type--credit {
+  color: #217a48;
+}
+
+.transaction-type--debit {
+  color: #b03f2b;
+}
+
 @media (max-width: 900px) {
+  .app-shell__hero,
   .detail-panel,
   .status-grid {
     grid-template-columns: 1fr;
+  }
+
+  .app-shell__hero {
+    flex-direction: column;
   }
 
   .hero-panel,
