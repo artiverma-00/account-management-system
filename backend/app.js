@@ -1,7 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 
-const systemRoutes = require("./routes/systemRoutes");
+const authRoutes = require("./routes/authRoutes");
+const accountRoutes = require("./routes/accountRoutes");
 
 const app = express();
 
@@ -13,12 +14,11 @@ app.use(
 app.use(express.json());
 
 app.get("/", (_req, res) => {
-  res.json({
-    message: "Express API is running.",
-  });
+  res.json({ message: "Express API is running." });
 });
 
-app.use("/api/system", systemRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/account", accountRoutes);
 
 app.use((req, res) => {
   res.status(404).json({
